@@ -2,7 +2,7 @@
 
 To run dev:
 
-Copy this snippet and run from **the repo root**:
+Run this snippet from the repository's root:
 
 ```sh
 SERVME_PATH="$(pwd)"
@@ -11,7 +11,7 @@ function servme() {
 }
 ```
 
-Then you can use this snippet to run the handlers from anywhere:
+Serve the example API:
 
 ```sh
 servme ./uboardserver/main.ts
