@@ -1,5 +1,6 @@
 import { exec } from "https://deno.land/x/exec@0.0.5/mod.ts";
 import { readLines } from "https://deno.land/std@0.147.0/io/buffer.ts";
+import * as path from "https://deno.land/std@0.127.0/path/mod.ts";
 
 export const serve = async (data: any) => {
   /**
@@ -19,13 +20,20 @@ export const serve = async (data: any) => {
   const {
     _: [, source],
   } = data;
-  const template = `${new URL('.', import.meta.url).pathname}_server.ts`;
+  const validatedSource = validateSource(source);
+  const template = `${new URL(".", import.meta.url).pathname}_server.ts`;
   const content = new TextDecoder("utf-8")
     .decode(Deno.readFileSync(template))
-    .replace("???1", source)
+    .replace("???1", validatedSource)
     .replace("???2", config);
   Deno.writeTextFileSync(file, content);
 
   await exec(`deno run --watch --allow-net ${file}`);
   Deno.removeSync(file);
 };
+
+//#region
+const validateSource = (source: string) => {
+  return path.join(Deno.cwd(), source);
+};
+//#endregion
